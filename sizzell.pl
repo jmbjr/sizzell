@@ -27,17 +27,17 @@ use POSIX qw(setsid); # For daemonization.
 use File::Find;
 use File::Glob qw/:globally :nocase/;
 
-my $nickname       = 'Sizzell';
-my $ircname        = 'Sizzell the Crawl Bot';
+my $nickname       = 'Rotatell';
+my $ircname        = 'Rotatell the Crawl Bot';
 # my $ircserver      = 'barjavel.freenode.net';
 # my $ircserver      = 'kornbluth.freenode.net';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
-my $ircserver      = 'irc.freenode.net';
-my $port           = 8001;
-my @CHANNELS       = ('##crawl', '##crawl-dev');
-my $ANNOUNCE_CHAN  = '##crawl';
-my $DEV_CHAN       = '##crawl-dev';
+my $ircserver      = 'irc.lunarnet.org';
+my $port           = 6667;
+my @CHANNELS       = ('#octolog', '#octotest');
+my $ANNOUNCE_CHAN  = '#octolog';
+my $DEV_CHAN       = '#octotest';
 my @badusers;
 
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
@@ -45,32 +45,14 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/milestones',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/milestones-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/milestones-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/milestones',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/milestones-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/milestones-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/milestones',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/milestones-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/milestones-zotdef');
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef');
 
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/logfile',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.12/saves/logfile-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/logfile',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.11/saves/logfile-zotdef',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/logfile',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.10/saves/logfile-zotdef');
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef');
 
 my @announcefiles  = ('/home/crawl-dev/logs/announcements.log');
 my $pidfile        = '/home/crawl-dev/run/sizzell.pid';
@@ -84,7 +66,7 @@ my $INACTIVE_IDLE_CEILING_SECONDS = 300;
 my $MAX_LENGTH = 420;
 # The largest message to paginate in PM.
 my $MAX_PAGINATE_LENGTH = 2000;
-my $SERVER_BASE_URL = 'http://dobrazupa.org';
+my $SERVER_BASE_URL = 'http://crawl.boylecraft.net';
 my $MORGUE_BASE_URL = "$SERVER_BASE_URL/morgue";
 
 # Uniques that generate in D and/or Lair, excluding Sigmund and Rupert
@@ -99,11 +81,11 @@ my %GAME_TYPE_NAMES = (zot => 'ZotDef',
                        spr => 'Sprint');
 
 my %COMMANDS = (
-  '%whereis' => \&cmd_whereis,
-  '%dump' => \&cmd_dump,
-  '!cszo'     => \&cmd_players,
-  '%players' => \&cmd_players,
-  '%version' => \&cmd_version,
+  '^whereis' => \&cmd_whereis,
+  '^dump' => \&cmd_dump,
+  '!cbn'     => \&cmd_players,
+  '^players' => \&cmd_players,
+  '^version' => \&cmd_version,
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
 );
@@ -216,6 +198,8 @@ sub newsworthy
 
   return 0 if user_is_bad($g->{name});
 
+  return 1;
+  
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
   my $br_enter = $type eq 'enter' || $type eq 'br.enter';
@@ -541,7 +525,7 @@ sub cmd_version {
   my ($m, $nick, $verbatim) = @_;
   my @answers = ();
 
-  for my $branch (qw(trunk 0.13 0.12 0.11 0.10)) {
+  for my $branch (qw(trunk 0.13)) {
     my $version = get_crawl_version($branch);
     push @answers, "$branch: $version";
   }
