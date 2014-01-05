@@ -33,11 +33,11 @@ my $ircname        = 'Rotatell the Crawl Bot';
 # my $ircserver      = 'kornbluth.freenode.net';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
-my $ircserver      = 'irc.lunarnet.org';
-my $port           = 6667;
-my @CHANNELS       = ('#octolog', '#octotest');
-my $ANNOUNCE_CHAN  = '#octolog';
-my $DEV_CHAN       = '#octotest';
+my $ircserver      = 'irc.freenode.net';
+my $port           = 8001;
+my @CHANNELS       = ('##crawl', '##crawl-dev');
+my $ANNOUNCE_CHAN  = '##crawl';
+my $DEV_CHAN       = '##crawl-dev';
 my @badusers;
 
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
@@ -197,8 +197,6 @@ sub newsworthy
   my $g = shift;
 
   return 0 if user_is_bad($g->{name});
-
-  return 1;
   
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
