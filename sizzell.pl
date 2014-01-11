@@ -33,11 +33,11 @@ my $ircname        = 'Rotatell the Crawl Bot';
 # my $ircserver      = 'kornbluth.freenode.net';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
-my $ircserver      = 'irc.lunarnet.org';
-my $port           = 6667;
-my @CHANNELS       = ('#octolog', '#octotest');
-my $ANNOUNCE_CHAN  = '#octolog';
-my $DEV_CHAN       = '#octotest';
+my $ircserver      = 'irc.freenode.net';
+my $port           = 8001;
+my @CHANNELS       = ('##crawl', '##crawl-dev');
+my $ANNOUNCE_CHAN  = '##crawl';
+my $DEV_CHAN       = '##crawl-dev';
 my @badusers;
 
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
@@ -197,43 +197,42 @@ sub newsworthy
   my $g = shift;
 
   return 0 if user_is_bad($g->{name});
-
   
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
   my $br_enter = $type eq 'enter' || $type eq 'br.enter';
   my $place_branch = game_place_branch($g);
 
-  return 1 if grep($_ eq $type, 'crash', 'monstrous', 'death', 'br.mid', 'br.exit', 'begin');
+  return 0 if grep($_ eq $type, 'crash', 'monstrous', 'death', 'br.mid', 'br.exit', 'begin');
 
-  return 1
+  return 0
     if $br_enter
       && grep($place_branch eq $_, qw/Temple Lair D Orc/);
 
-  return 1
+  return 0
     if ($type eq 'br.end')
       && grep($place_branch eq $_, qw/Lair Orc/);
 
   if ($type eq 'zig') {
     my ($depth) = ($$g{milestone} || '') =~ /reached level (\d+)/;
-    return 1 if $depth < 18 && $$g{xl} >= 27;
+    return 0 if $depth < 18 && $$g{xl} >= 27;
   }
 
-  return 1
+  return 0
     if milestone_is_uniq($g) && grep(index($$g{milestone}, $_) != -1,
                                      @BORING_UNIQUES);
 
   # Suppress all Sprint/ZotDef events other than wins.
-  return 1 if (game_type($g) && ($$g{ktyp} || '') ne 'winning');
+  return 0 if (game_type($g) && ($$g{ktyp} || '') ne 'winning');
 
-  return 1
+  return 0
     if (!$$g{milestone}
         && ($g->{sc} <= 1000
             && ($g->{ktyp} eq 'quitting'
                 || $g->{ktyp} eq 'leaving'
                 || $g->{turn} <= 3000)));
 
-  return 0;
+  return 1;
 }
 
 sub devworthy
