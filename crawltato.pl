@@ -706,20 +706,17 @@ sub cmd_watch {
 
 sub player_active($) {
   my $nick = shift;
+  my $match = 0;
 
   find(sub {
-         my $filename = $File::Find::name;
-         if (-f $filename && $filename =~ /\.ttyrec$/) {
-           my ($game_version, $player_name) =
-             $filename =~ m{.*/([^/]+)/(.*?):};
-           if ($nick eq  $player_name) {
-             return 1;
-           }
+         my $filename = $File::Find::name;        
+         if (-f $filename && $filename =~ /\/$nick.*ttyrec$/) {
+           $match = 1; 
          }
        },
        $DGL_INPROGRESS_DIR);
 
-  return 0
+  return $match;
 }
 
 
