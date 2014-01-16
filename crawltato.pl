@@ -700,7 +700,7 @@ sub cmd_watch {
     post_message($m, "No current CBRO game for $realnick.");
     return;
   }
-  post_message($m, "Watch $realnick at:" . $WEBTILES_BASE_URL . $realnick);
+  post_message($m, "Watch $realnick at: " . $WEBTILES_BASE_URL . $realnick);
 }
 
 sub show_dump_file($$) {
