@@ -695,13 +695,33 @@ sub cmd_watch {
 
   # Get the nick to act on.
   my $realnick = find_named_nick($nick, $verbatim);
-  my $watch = player_whereis_hash($realnick);
+  my $watch = player_active($realnick);
+
   unless ($watch) {
     post_message($m, "No current CBRO game for $realnick.");
     return;
   }
   post_message($m, "Watch $realnick at: " . $WEBTILES_BASE_URL . $realnick);
 }
+
+sub player_active($) {
+  my $nick = shift;
+
+  find(sub {
+         my $filename = $File::Find::name;
+         if (-f $filename && $filename =~ /\.ttyrec$/) {
+           my ($game_version, $player_name) =
+             $filename =~ m{.*/([^/]+)/(.*?):};
+           if ($nick eq  $player_name) {
+             return 1;
+           }
+         }
+       },
+       $DGL_INPROGRESS_DIR);
+
+  return 0
+}
+
 
 sub show_dump_file($$) {
   my ($m, $whereis_file) = @_;
