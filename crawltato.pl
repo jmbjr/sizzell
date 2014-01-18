@@ -87,7 +87,7 @@ my %COMMANDS = (
   '!xxxcbro'     => \&cmd_players,
   '^xxxplayers' => \&cmd_players,
   '^xxxversion' => \&cmd_version,
-  '^watch' => \&cmd_watch,
+  '^xxxwatch' => \&cmd_watch,
 
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
