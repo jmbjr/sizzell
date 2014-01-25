@@ -38,7 +38,7 @@ my $port           = 6667;
 my @CHANNELS       = ('#octolog', '#octotest');
 my $ANNOUNCE_CHAN  = '#octolog';
 my $DEV_CHAN       = '#octotest';
-my $PM_TARGET      = 'johnstein';
+my $PM_TARGET      = 'OCTOTROG';
 
 my @badusers;
 
@@ -263,19 +263,18 @@ sub xlog_place
 sub raw_message_post {
   my ($m, $output) = @_;
   
-  $output =~ s{^/msg $PM_TARGET }{};
 
   # Handle emotes (/me does foo)
   if ($output =~ m{^/me }) {
     $output =~ s{^/me }{};
-    $BOT->emote(channel => $$m{channel},
-                who => $$m{who},
+    $BOT->emote(channel => 'msg',
+                who => $PM_TARGET,
                 body => $output);
     return;
   }
 
-  $BOT->say(channel => $$m{channel},
-            who => $$m{who},
+  $BOT->say(channel => 'msg',
+            who => $PM_TARGET,
             body => $output);
 }
 
