@@ -27,7 +27,7 @@ use POSIX qw(setsid); # For daemonization.
 use File::Find;
 use File::Glob qw/:globally :nocase/;
 
-my $nickname       = 'Rotatell';
+my $nickname       = 'Rotatelljr';
 my $ircname        = 'Rotatelljr the Crawl Bot';
 # my $ircserver      = 'barjavel.freenode.net';
 # my $ircserver      = 'kornbluth.freenode.net';
