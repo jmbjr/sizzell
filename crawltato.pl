@@ -38,6 +38,8 @@ my $port           = 6667;
 my @CHANNELS       = ('#octolog', '#octotest');
 my $ANNOUNCE_CHAN  = '#octolog';
 my $DEV_CHAN       = '#octotest';
+my $PM_TARGET      = 'johnstein';
+
 my @badusers;
 
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
@@ -260,6 +262,9 @@ sub xlog_place
 
 sub raw_message_post {
   my ($m, $output) = @_;
+  
+  $output =~ s{^/msg $PM_TARGET }{};
+
   # Handle emotes (/me does foo)
   if ($output =~ m{^/me }) {
     $output =~ s{^/me }{};
