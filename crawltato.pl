@@ -286,14 +286,14 @@ sub report_milestone
   {
     $placestring = "";
   }
-
-  post_message({ channel => $channel },
-               sprintf("%s (L%s %s) %s%s",
+  my $msg = sprintf("%s (L%s %s) %s%s",
                        $game_ref->{name},
                        $game_ref->{xl},
                        $game_ref->{char},
                        $milestone,
-                       $placestring));
+                       $placestring); 
+  
+  post_message({ channel => $channel },$msg);
 }
 
 sub parse_milestone_file
