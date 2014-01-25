@@ -28,16 +28,18 @@ use File::Find;
 use File::Glob qw/:globally :nocase/;
 
 my $nickname       = 'Rotatell';
-my $ircname        = 'Rotatell the Crawl Bot';
+my $ircname        = 'Rotatelljr the Crawl Bot';
 # my $ircserver      = 'barjavel.freenode.net';
 # my $ircserver      = 'kornbluth.freenode.net';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
-my $ircserver      = 'irc.lunarnet.org';
-my $port           = 6667;
-my @CHANNELS       = ('#octolog', '#octotest');
+#my $ircserver      = 'irc.lunarnet.org';
+my $ircserver      = 'irc.freenode.net';
+
+my $port           = 8001;
+my @CHANNELS       = ('#octolog');
 my $ANNOUNCE_CHAN  = '#octolog';
-my $DEV_CHAN       = '#octotest';
+my $DEV_CHAN       = '#octolog';
 my $PM_TARGET      = 'OCTOTROG';
 
 my @badusers;
