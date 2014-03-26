@@ -264,19 +264,17 @@ sub xlog_place
 
 sub raw_message_post {
   my ($m, $output) = @_;
-  
-
   # Handle emotes (/me does foo)
   if ($output =~ m{^/me }) {
     $output =~ s{^/me }{};
-    $BOT->emote(channel => 'msg',
-                who => $PM_TARGET,
+    $BOT->emote(channel => $$m{channel},
+                who => $$m{who},
                 body => $output);
     return;
   }
 
-  $BOT->say(channel => 'msg',
-            who => $PM_TARGET,
+  $BOT->say(channel => $$m{channel},
+            who => $$m{who},
             body => $output);
 }
 
@@ -979,4 +977,4 @@ sub say {
   my ($ewho, $ebody) = $self->charset_encode($who, $body);
   $self->privmsg($ewho, $ebody);
 }
-#!/usr/bin/perl
+
