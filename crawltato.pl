@@ -34,7 +34,7 @@ my $ircname        = 'Rotatelljr the Crawl Bot';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
 #my $ircserver      = 'irc.lunarnet.org';
-my $ircserver      = 'irc.freenode.net';
+my $ircserver      = 'chat.freenode.net';
 
 my $port           = 8001;
 my @CHANNELS       = ('#octolog');
@@ -47,16 +47,27 @@ my @badusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/milestones-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/milestones-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef');
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/milestones');
+
+
 
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef');
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef'
+                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
+
 
 my @announcefiles  = ('/home/crawl-dev/logs/not.the.announcements.log');
 my $pidfile        = '/home/crawl-dev/run/sizzell.pid';
