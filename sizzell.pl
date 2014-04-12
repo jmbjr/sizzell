@@ -61,7 +61,7 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef'
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
 
 my @announcefiles  = ('/home/crawl-dev/logs/announcements.log');
@@ -536,7 +536,7 @@ sub cmd_version {
   my ($m, $nick, $verbatim) = @_;
   my @answers = ();
 
-  for my $branch (qw(trunk 0.13)) {
+  for my $branch (qw(trunk 0.14 0.13)) {
     my $version = get_crawl_version($branch);
     push @answers, "$branch: $version";
   }
