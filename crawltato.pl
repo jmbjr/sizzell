@@ -53,6 +53,8 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-gods/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/milestones');
 
 
@@ -65,9 +67,10 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef'
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-gods/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
-
 
 my @announcefiles  = ('/home/crawl-dev/logs/not.the.announcements.log');
 my $pidfile        = '/home/crawl-dev/run/sizzell.pid';
@@ -91,7 +94,7 @@ my @BORING_UNIQUES = qw/Ijyb Jessica Terence Yiuf Blork Eustachio
                         Menkaure Ribbit Joseph Grum Psyche
                         Maurice Erica Fannar Harold Erolcha
                         Nergalle Urug Josephine Gastronok Sonja
-                        Nessos Maud Purgy Snorg/;
+                        Nessos Maud Purgy Snorg Natasha Asterion/;
 
 my %GAME_TYPE_NAMES = (zot => 'ZotDef',
                        spr => 'Sprint');
@@ -216,13 +219,14 @@ sub newsworthy
 
   return 1 if user_is_bad($g->{name});
 
+  return 0 if grep($_ eq $type, 'br.exit');
  
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
   my $br_enter = $type eq 'enter' || $type eq 'br.enter';
   my $place_branch = game_place_branch($g);
 
-  return 1 if grep($_ eq $type, 'crash', 'monstrous', 'death', 'br.mid', 'br.exit', 'begin');
+  return 1 if grep($_ eq $type, 'crash', 'monstrous', 'death', 'br.mid', 'br.exit', 'begin', 'uniq.seen');
 
   return 1
     if $br_enter
