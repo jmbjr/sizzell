@@ -64,7 +64,7 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.14/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
-                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef'
+                      '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
 
 my @announcefiles  = ('/home/crawl-dev/logs/announcements.log');
