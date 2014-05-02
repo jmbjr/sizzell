@@ -218,13 +218,13 @@ sub newsworthy
   my $g = shift;
 
   return 1 if user_is_bad($g->{name});
-
-  return 0 if grep($_ eq $type, 'br.exit');
  
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
   my $br_enter = $type eq 'enter' || $type eq 'br.enter';
   my $place_branch = game_place_branch($g);
+
+  return 0 if grep($_ eq $type, 'br.exit');
 
   return 1 if grep($_ eq $type, 'crash', 'monstrous', 'death', 'br.mid', 'br.exit', 'begin', 'uniq.seen');
 
