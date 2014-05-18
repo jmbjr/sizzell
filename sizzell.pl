@@ -50,6 +50,9 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-weightless/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-new_nemelex/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/milestones');
 
@@ -65,6 +68,9 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-weightless/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-new_nemelex/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
 
