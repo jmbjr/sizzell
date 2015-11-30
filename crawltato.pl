@@ -47,6 +47,8 @@ my @badusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.17/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.17/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/milestones-sprint',
 		      '/home/crawl/DGL/crawl-master/crawl-0.15/saves/milestones',
@@ -60,6 +62,10 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-imp/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-mulch_ado_about_nothing/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-evoker-god-rebase/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-abyssrun/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-orcs_and_elves/saves/milestones',
 		      '/home/crawl/DGL/crawl-master/crawl-weightless/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-chunkless/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/milestones',
@@ -72,6 +78,8 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.17/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.17/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.15/saves/logfile',
@@ -84,7 +92,11 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-evoker-god-rebase/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-abyssrun/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-orcs_and_elves/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-imp/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-mulch_ado_about_nothing/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-weightless/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-chunkless/saves/logfile',
@@ -262,7 +274,7 @@ sub newsworthy
      
   if ($type eq 'zig') {
     my ($depth) = ($$g{milestone} || '') =~ /reached level (\d+)/;
-    return 1 if $depth < 20
+    return 1 if $depth < 20;
   }
 
   return 1
