@@ -26,14 +26,17 @@ use warnings;
 use POSIX qw(setsid); # For daemonization.
 use File::Find;
 use File::Glob qw/:globally :nocase/;
+use Time::HiRes qw(gettimeofday);
+use Scalar::Util qw(looks_like_number);
 
+my $timestamp = int (gettimeofday * 1000);
 my $nickname       = 'Rotatell';
 my $ircname        = 'Rotatell the Crawl Bot';
 # my $ircserver      = 'barjavel.freenode.net';
 # my $ircserver      = 'kornbluth.freenode.net';
 # my $ircserver      = 'bartol.freenode.net';
 # my $ircserver      = 'pratchett.freenode.net';
-my $ircserver      = 'chat.freenode.net';
+my $ircserver      = 'verne.freenode.net';
 my $port           = 8001;
 my @CHANNELS       = ('##crawl', '##crawl-dev');
 my $ANNOUNCE_CHAN  = '##crawl';
@@ -43,6 +46,8 @@ my @badusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.18/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.18/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/milestones',
@@ -57,6 +62,7 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/milestones-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-combo_god/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-imp/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-evoker-god/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-evoker-god-rebase/saves/milestones',
@@ -67,6 +73,8 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-no_backtracking_god/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-chunkless/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-faithful/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-shopmenu/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-new_nemelex/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-salamander/saves/milestones',
 		      '/home/crawl/DGL/crawl-master/crawl-bearkin/saves/milestones',
@@ -80,6 +88,8 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.18/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.18/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.16/saves/logfile',
@@ -94,6 +104,7 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.13/saves/logfile-zotdef',
                       '/home/crawl/DGL/crawl-master/crawl-gods/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-combo_god/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-imp/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-evoker-god/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-evoker-god-rebase/saves/logfile',
@@ -103,6 +114,8 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-weightless/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-chunkless/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-faithful/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-shopmenu/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-no_backtracking_god/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-salamander/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-bearkin/saves/logfile',
@@ -138,7 +151,7 @@ my %COMMANDS = (
   '^players' => \&cmd_players,
   '^version' => \&cmd_version,
   '^watch' => \&cmd_watch,
-
+#  '^mapstat' => \&cmd_mapstat,
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
 );
@@ -590,7 +603,7 @@ sub cmd_version {
   my ($m, $nick, $verbatim) = @_;
   my @answers = ();
 
-  for my $branch (qw(trunk 0.17 0.16 0.15 0.14 0.13)) {
+  for my $branch (qw(trunk 0.18 0.17 0.16 0.15 0.14 0.13)) {
     my $version = get_crawl_version($branch);
     push @answers, "$branch: $version";
   }
@@ -754,6 +767,40 @@ sub cmd_whereis {
   show_where_information($m, $where);
 }
 
+sub cmd_mapstat {
+  my ($m, $nick, $verbatim) = @_;
+  my @inputs = split / /, $verbatim;
+  my $num_inputs = @inputs;
+  my $ret_msg = "err";
+  my $branch = "D";
+  my $floor = 1;
+  my $the_cmd = "ls";
+  my $crawl_path = "/home/crawl-dev/crawl-dev/sizzell/crawl/crawl-ref/source/crawl";
+  my $mapstatfile = "./mapstat.log";
+  my $iters = 100;
+  my $url = "http://crawl.berotato.org/crawl/mapstat";
+
+  if ( $num_inputs <= 1) {
+    $ret_msg = "^mapstat: runs mapstat (current trunk) for selected branch and floor ($iters iterations): ^mapstat Crypt 3"
+  }
+  elsif ( $num_inputs == 2 || $num_inputs > 3 ) {
+    $ret_msg = "bad number of arguments: ^mapstat currenly requires 2 inputs, branch & floor: Crypt 3 (branches are generally capitalized. this matters for now)"
+  }
+  elsif ( looks_like_number($inputs[1]) || !looks_like_number($inputs[2])) {
+    $ret_msg = "bad branch/floor syntax. ^mapstat currenly requires 2 inputs, branch & floor: Crypt 3 (branches are generally capitalized. this matters for now)"
+  }
+  else {
+    $branch = $inputs[1];
+    $floor = $inputs[2];
+    my $outfile = "/home/crawl-dev/sizzell/mapstat/$branch-$floor\_$nick\_$timestamp.log";
+
+    $the_cmd = "rm $mapstatfile ; $crawl_path -version > $outfile ; $crawl_path -mapstat $branch:$floor -iters $iters >> $outfile ; cat $mapstatfile >> $outfile";
+    system($the_cmd);
+    $ret_msg = "Ran crawl -mapstat $branch:$floor -iters $iters -> $url/$branch-$floor\_$nick\_$timestamp.log";
+  } 
+  post_message($m, "$ret_msg" );
+  return;
+} 
 sub cmd_watch {
   my ($m, $nick, $verbatim) = @_;
 
