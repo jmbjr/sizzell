@@ -151,6 +151,7 @@ my %COMMANDS = (
   '^players' => \&cmd_players,
   '^version' => \&cmd_version,
   '^watch' => \&cmd_watch,
+  '^vps' => \&cmd_vps,
 #  '^mapstat' => \&cmd_mapstat,
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
@@ -800,7 +801,18 @@ sub cmd_mapstat {
   } 
   post_message($m, "$ret_msg" );
   return;
-} 
+}
+
+sub cmd_vps {
+  my ($m, $nick, $verbatim) = @_;
+  my $DF =`df / | grep / | awk '{ print \$5}' | tr -d '\n'`;
+  my $RAM =`free -m /| grep /| awk '{print int(\$3 / (\$3 + \$4) * 100), "%"}' | sed 's/ //g'| tr -d '\n' `;
+  my $CPU =`uptime | tr -d '\n'`;
+  post_message($m, "CBRO disk usage=$DF | RAM usage=$RAM | uptime/CPU=$CPU");
+  return;
+}
+
+
 sub cmd_watch {
   my ($m, $nick, $verbatim) = @_;
 
