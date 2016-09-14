@@ -42,6 +42,7 @@ my @CHANNELS       = ('##crawl', '##crawl-dev');
 my $ANNOUNCE_CHAN  = '##crawl';
 my $DEV_CHAN       = '##crawl-dev';
 my @badusers;
+my @mapstatusers;
 
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
@@ -128,6 +129,7 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
 my @announcefiles  = ('/home/crawl-dev/logs/announcements.log');
 my $pidfile        = '/home/crawl-dev/run/sizzell.pid';
 my $baduserfile    = '/home/crawl-dev/sizzell/.badusers';
+my $mapstatfile    = '/home/crawl-dev/sizzell/.mapstatusers';
 
 my $DGL_INPROGRESS_DIR    = '/home/crawl/DGL/dgldir/inprogress/';
 my $DGL_TTYREC_DIR        = '/home/crawl/DGL/dgldir/ttyrec/';
@@ -152,7 +154,7 @@ my %COMMANDS = (
   '^version' => \&cmd_version,
   '^watch' => \&cmd_watch,
   '^vps' => \&cmd_vps,
-#  '^mapstat' => \&cmd_mapstat,
+  '^mapstat' => \&cmd_mapstat,
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
 );
@@ -177,6 +179,16 @@ if (defined $_[0] and $_[0] eq '-t') {
 my @stonehandles = open_handles(@stonefiles);
 my @loghandles = open_handles(@logfiles);
 my @announcehandles = open_handles(@announcefiles);
+
+if (open my $mapstathandle, "<", $mapstatfile) {
+  while (<$mapstathandle>) {
+    chomp;
+    push @mapstatusers, qr/$_/i;
+  }
+  close $mapstathandle;
+} else {
+  warn "Cannot open $mapstatfile: $!";
+}
 
 if (open my $baduserhandle, "<", $baduserfile) {
   while (<$baduserhandle>) {
@@ -263,6 +275,11 @@ sub game_is_zotdef($) {
 sub user_is_bad($) {
   my $name = shift;
   scalar grep { $name =~ /^$_$/ } @badusers;
+}
+
+sub user_can_map($) {
+  my $name = shift;
+  scalar grep { $name =~ /^$_$/ } @mapstatusers;
 }
 
 sub newsworthy
@@ -781,6 +798,15 @@ sub cmd_mapstat {
   my $iters = 100;
   my $url = "http://crawl.berotato.org/crawl/mapstat";
 
+  $timestamp = int (gettimeofday * 1000);
+
+#  return 0 if user_is_bad($g->{name});
+  if ( !user_can_map($nick) ) {
+    $ret_msg = "you are not an authorized ^mapstat user. please contact johnstein for details";
+    post_message($m, "$ret_msg" );
+    return;
+  }
+
   if ( $num_inputs <= 1) {
     $ret_msg = "^mapstat: runs mapstat (current trunk) for selected branch and floor ($iters iterations): ^mapstat Crypt 3"
   }
@@ -795,7 +821,7 @@ sub cmd_mapstat {
     $floor = $inputs[2];
     my $outfile = "/home/crawl-dev/sizzell/mapstat/$branch-$floor\_$nick\_$timestamp.log";
 
-    $the_cmd = "rm $mapstatfile ; $crawl_path -version > $outfile ; $crawl_path -mapstat $branch:$floor -iters $iters >> $outfile ; cat $mapstatfile >> $outfile";
+    $the_cmd = "rm $mapstatfile ; $crawl_path -builddb > $outfile ;$crawl_path -version >> $outfile ; $crawl_path -mapstat $branch:$floor -iters $iters >> $outfile ; cat $mapstatfile >> $outfile";
     system($the_cmd);
     $ret_msg = "Ran crawl -mapstat $branch:$floor -iters $iters -> $url/$branch-$floor\_$nick\_$timestamp.log";
   } 
