@@ -47,6 +47,8 @@ my @mapstatusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.19/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.19/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/milestones',
@@ -92,6 +94,8 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.19/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.19/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.17/saves/logfile',
@@ -627,7 +631,7 @@ sub cmd_version {
   my ($m, $nick, $verbatim) = @_;
   my @answers = ();
 
-  for my $branch (qw(trunk 0.18 0.17 0.16 0.15 0.14 0.13)) {
+  for my $branch (qw(trunk 0.19 0.18 0.17 0.16 0.15 0.14 0.13)) {
     my $version = get_crawl_version($branch);
     push @answers, "$branch: $version";
   }
