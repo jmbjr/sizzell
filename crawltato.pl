@@ -262,8 +262,8 @@ sub newsworthy
 {
   my $g = shift;
 
-  return 1 if user_is_bad($g->{name});
- 
+  return 0 if user_is_bad($g->{name});
+
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
 #  my $br_enter = $type eq 'enter' || $type eq 'br.enter';
