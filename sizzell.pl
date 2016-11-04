@@ -296,6 +296,8 @@ sub newsworthy
 {
   my $g = shift;
 
+  return 0;
+
   return 0 if user_is_bad($g->{name});
 
   # Milestone type, empty if this is not a milestone.

@@ -307,7 +307,7 @@ sub newsworthy
   #suppress all deaths with less than 5000 score
   return 1 if (!$$g{milestone} && $g->{sc} < 5000);
 
-  return 0;
+  return 1;
 }
 
 sub devworthy
