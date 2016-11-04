@@ -86,7 +86,7 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
 
 my @announcefiles  = ('/home/crawl-dev/logs/announcements.log');
-my $pidfile        = '/home/crawl-dev/run/sizzell.pid';
+my $pidfile        = '/home/crawl-dev/sizzell/crawltato-lunarnet.pid';
 my $baduserfile    = '/home/crawl-dev/sizzell/.badusers';
 
 my $DGL_INPROGRESS_DIR    = '/home/crawl/DGL/dgldir/inprogress/';
