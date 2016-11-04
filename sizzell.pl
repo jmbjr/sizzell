@@ -297,7 +297,7 @@ sub newsworthy
   my $g = shift;
 
   return 0 if user_is_bad($g->{name});
-  
+
   # Milestone type, empty if this is not a milestone.
   my $type = $$g{type} || '';
   my $place_branch = game_place_branch($g);
@@ -844,7 +844,8 @@ sub cmd_vps {
   my $DF =`df / | grep / | awk '{ print \$5}' | tr -d '\n'`;
   my $RAM =`free -m /| grep /| awk '{print int(\$3 / (\$3 + \$4) * 100), "%"}' | sed 's/ //g'| tr -d '\n' `;
   my $CPU =`uptime | tr -d '\n'`;
-  post_message($m, "CBRO disk usage=$DF (135GB) | RAM usage=$RAM (4GB)| uptime/CPU=$CPU (4 Cores)");
+  my $numPlayers=`/home/crawl-dev/sizzell/numplayers | tr -d '\n'`;
+  post_message($m, "$numPlayers Crawlers. CBRO disk usage=$DF (135GB) | RAM usage=$RAM (4GB)| uptime/CPU=$CPU (4 Cores)");
   return;
 }
 
