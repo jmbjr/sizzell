@@ -163,7 +163,7 @@ my %COMMANDS = (
   '^players' => \&cmd_players,
   '^version' => \&cmd_version,
   '^watch' => \&cmd_watch,
-  '^vps' => \&cmd_vps,
+  '^status' => \&cmd_vps,
   '^mapstat' => \&cmd_mapstat,
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
@@ -847,7 +847,8 @@ sub cmd_vps {
   my $RAM =`free -m /| grep /| awk '{print int(\$3 / (\$3 + \$4) * 100), "%"}' | sed 's/ //g'| tr -d '\n' `;
   my $CPU =`uptime | tr -d '\n'`;
   my $numPlayers=`/home/crawl-dev/sizzell/numplayers | tr -d '\n'`;
-  post_message($m, "$numPlayers Crawlers. CBRO disk usage=$DF (135GB) | RAM usage=$RAM (4GB)| uptime/CPU=$CPU (4 Cores)");
+  my $statusurl="http://status.berotato.org";
+  post_message($m, "$numPlayers Crawlers. CBRO disk usage=$DF (135GB) | RAM usage=$RAM (4GB)| uptime/CPU=$CPU (4 Cores) $statusurl");
   return;
 }
 
