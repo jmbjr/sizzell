@@ -47,6 +47,8 @@ my @badusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.20/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.20/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.19/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.19/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/milestones',
@@ -78,13 +80,17 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-plutonians/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-new_nemelex/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/milestones',
-                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/milestones');
+                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-councilgod/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-hellcrawl-cbro/saves/milestones');
 
 
 
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.20/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.20/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.19/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.19/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.18/saves/logfile',
@@ -116,7 +122,9 @@ my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-thorn_god/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-new_nemelex/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-ranged_combat/saves/logfile',
-                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile');
+                      '/home/crawl/DGL/crawl-master/crawl-nostalgia/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-councilgod/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-hellcrawl-cbro/saves/logfile');
 
 my @announcefiles  = ('/home/crawl-dev/logs/not.the.announcements.log');
 my $pidfile        = '/home/crawl-dev/sizzell/crawltato.pid';
