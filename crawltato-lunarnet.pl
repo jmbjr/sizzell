@@ -113,12 +113,12 @@ my %GAME_TYPE_NAMES = (zot => 'ZotDef',
                        spr => 'Sprint');
 
 my %COMMANDS = (
-  '^xxxwhereis' => \&cmd_whereis,
-  '^xxxdump' => \&cmd_dump,
+  '^^whereis' => \&cmd_whereis,
+  '^^dump' => \&cmd_dump,
   '!xxxcbro'     => \&cmd_players,
   '^xxxplayers' => \&cmd_players,
-  '^xxxversion' => \&cmd_version,
-  '^xxxwatch' => \&cmd_watch,
+  '^^version' => \&cmd_version,
+  '^^watch' => \&cmd_watch,
 
 #  '%??' => \&cmd_trunk_monsterinfo,
 #  '%?' => \&cmd_monsterinfo,
