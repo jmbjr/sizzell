@@ -47,6 +47,12 @@ my @badusers;
 my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/milestones-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.25/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.25/saves/milestones-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.24/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.24/saves/milestones-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.23/saves/milestones',
+                      '/home/crawl/DGL/crawl-master/crawl-0.23/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.22/saves/milestones',
                       '/home/crawl/DGL/crawl-master/crawl-0.22/saves/milestones-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.21/saves/milestones',
@@ -93,6 +99,12 @@ my @stonefiles     = ('/home/crawl/DGL/crawl-master/crawl-git/saves/milestones',
 my @logfiles       = ('/home/crawl/DGL/crawl-master/crawl-git/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-git/saves/logfile-zotdef',
+                      '/home/crawl/DGL/crawl-master/crawl-0.25/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.25/saves/logfile-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.24/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.24/saves/logfile-sprint',
+                      '/home/crawl/DGL/crawl-master/crawl-0.23/saves/logfile',
+                      '/home/crawl/DGL/crawl-master/crawl-0.23/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.22/saves/logfile',
                       '/home/crawl/DGL/crawl-master/crawl-0.22/saves/logfile-sprint',
                       '/home/crawl/DGL/crawl-master/crawl-0.21/saves/logfile',
@@ -153,6 +165,34 @@ my $WEBTILES_BASE_URL = 'http://crawl.berotato.org:8080/#watch-';
 
 my %GAME_TYPE_NAMES = (zot => 'ZotDef',
                        spr => 'Sprint');
+
+my %POSTQUELL_NEWSWORTHY_BY_TYPE = ('br.enter' => qw/Zot Tomb Hell Coc Geh Dis
+                                                  Tar Pan WizLab/,
+                                    'br.exit' => qw/Zot Tomb Coc Geh Dis Tar
+                                                 Vaults Shoals Snake Spider
+                                                 Swamp Slime Abyss Elf/,
+                                    'uniq' => qw/Abyss Zot Coc Geh Dis Tar Tomb
+                                              Hell Slime Pan/,
+                                    'ghost' => qw/Abyss Zot Coc Geh Dis Tar Tomb
+                                               Hell Slime Pan Depths Vaults
+                                               Crypt/);
+
+my %ROTATO_NEWSWORTHY_BY_TYPE = ('br.enter' => qw/Zot Tomb Hell Coc Geh Dis
+                                               Tar Pan WizLab Lair Vaults
+                                               Shoals Snake Spider Swamp
+                                               Slime Abyss/,
+                                 'br.exit' => qw/Zot Tomb Coc Geh Dis Tar
+                                              Vaults Shoals Snake Spider
+                                              Swamp Slime Abyss Elf/,
+                                 'uniq' => qw/Abyss Zot Coc Geh Dis Tar Tomb
+                                           Hell Slime Pan Lair Dungeon Vaults
+                                              Shoals Snake Spider Swamp
+                                              Slime Abyss Elf/,
+                                 'ghost' => qw/Abyss Zot Coc Geh Dis Tar Tomb
+                                            Hell Slime Pan Depths Lair Dungeon
+                                            Vaults Shoald Snake Spider Swamp
+                                            Slime Abyss Elf Crypt/);
+
 
 my %COMMANDS = (
   '^xxxwhereis' => \&cmd_whereis,
@@ -274,6 +314,38 @@ sub user_is_bad($) {
   scalar grep { $name =~ /^$_$/ } @badusers;
 }
 
+sub place_is_postquell_newsworthy {
+  my $type = shift;
+  my $place_branch = shift;
+  return 0 if !(defined $_); 
+  return 1 if grep($place_branch eq $_, $POSTQUELL_NEWSWORTHY_BY_TYPE{$type});
+}
+
+sub place_is_rotato_newsworthy {
+  my $type = shift;
+  my $place_branch = shift;
+  return 0 if !(defined $_); 
+  return 1 if grep($place_branch eq $_, $ROTATO_NEWSWORTHY_BY_TYPE{$type});
+}
+
+sub zig_depth_is_postquell_newsworthy {
+  my $depth = shift;
+  return 1 if $depth >= 20;
+}
+
+sub zig_depth_is_rotato_newsworthy {
+  return 1;
+}
+
+sub score_is_postquell_newsworthy {
+  my $sc = shift;
+  return 1 if $sc >= 5000;
+}
+
+sub score_is_rotato_newsworthy {
+  return 1;
+}
+
 sub newsworthy
 {
   my $g = shift;
@@ -294,34 +366,35 @@ sub newsworthy
 			         'ghost', 'ghost.ban', 'ghost.pac', '');
 
   return 1
-     if ($type eq 'br.enter')
-       && !grep($place_branch eq $_, qw/Zot Tomb Hell Coc Geh Dis Tar Pan
-	                                WizLab/);
+    if ($type eq 'br.enter')
+      && place_is_rotato_newsworthy($type, $place_branch)
+      && !place_is_postquell_newsworthy($type, $place_branch);
   return 1
     if ($type eq 'br.end')
-      && !grep($place_branch eq $_, qw/Zot Tomb Coc Geh Dis Tar Vaults Shoals
-	                               Snake Spider Swamp Slime Abyss Elf/);
-     
+      && place_is_rotato_newsworthy($type, $place_branch)
+      && !place_is_postquell_newsworthy($type, $place_branch);
+
   if ($type eq 'zig') {
     my ($depth) = ($$g{milestone} || '') =~ /reached level (\d+)/;
-    return 1 if $depth < 20;
+    return 1 if zig_depth_is_rotato_newsworthy($type, $place_branch)
+      && !zig_depth_is_postquell_newsworthy($depth);
   }
 
   return 1
-    if milestone_is_uniq($g) 
-      && !grep($place_branch eq $_, qw/Abyss Zot Coc Geh Dis Tar Tomb Hell
-	                               Slime Pan/);
+    if milestone_is_uniq($g)
+      && place_is_rotato_newsworthy('uniq', $place_branch)
+      && !place_is_postquell_newsworthy('uniq', $place_branch);
   return 1
     if milestone_is_ghost($g)
-      && !grep($place_branch eq $_, qw/Abyss Zot Coc Geh Dis Tar Tomb Hell
-	                               Slime Pan Depths Vaults Crypt/);
-
+      && place_is_rotato_newsworthy('ghost', $place_branch)
+      && !place_is_postquell_newsworthy('ghost', $place_branch);
 
   # Suppress all Sprint/ZotDef events other than wins.
   return 0 if (game_type($g) && ($$g{ktyp} || '') ne 'winning');
 
-  #suppress all deaths with less than 5000 score
-  return 1 if (!$$g{milestone} && $g->{sc} < 5000);
+  return 1 if (!$$g{milestone}
+              && score_is_rotato_newsworthy($g->{sc})
+              && !score_is_postquell_newsworthy($g->{sc}));
 
   return 1;
 }
@@ -379,8 +452,8 @@ sub report_milestone
                        $game_ref->{xl},
                        $game_ref->{char},
                        $milestone,
-                       $placestring); 
-  
+                       $placestring);
+
   post_message({ channel => $channel },$msg);
 }
 
@@ -797,9 +870,9 @@ sub player_active($) {
   my $match = 0;
 
   find(sub {
-         my $filename = $File::Find::name;        
+         my $filename = $File::Find::name;
          if (-f $filename && $filename =~ /\/$nick.*ttyrec$/) {
-           $match = 1; 
+           $match = 1;
          }
        },
        $DGL_INPROGRESS_DIR);
@@ -1061,4 +1134,3 @@ sub say {
   my ($ewho, $ebody) = $self->charset_encode($who, $body);
   $self->privmsg($ewho, $ebody);
 }
-
